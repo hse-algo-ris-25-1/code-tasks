@@ -49,6 +49,24 @@ class TestTridiagonalDeterminant(unittest.TestCase):
         matrix = [[2, -3, 0, 0], [5, 2, -3, 0], [0, 5, 2, -3], [0, 0, 5, 2]]
         self.assertEqual(get_tridiagonal_determinant(matrix), 421)
 
+    def test_not_triag_bad_diag_matrix(self):
+        """Проверяет, что функция выбрасывает исключение при передаче в
+        параметр матрицы, в которой одна из диагоналей содержит неверный элемент"""
+        self.assertRaises(
+            Exception,
+            get_tridiagonal_determinant,
+            [[2, -3, 0, 0], [5, 2, -3, 0], [0, 5, 2, -3], [0, 0, 5, 1]],
+        )
+
+    def test_double_elem_matrix(self):
+        """Проверяет, что функция выбрасывает исключение при передаче в
+        параметр матрицы, в которой есть не целое число"""
+        self.assertRaises(
+            Exception,
+            get_tridiagonal_determinant,
+            [[2.8, -3, 0, 0], [5, 2, -3, 0], [0, 5, 2, -3], [0, 0, 5, 1]],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
