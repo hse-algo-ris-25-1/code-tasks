@@ -1,5 +1,7 @@
 import sys
-sys.stdout.reconfigure(encoding='utf-8')
+
+sys.stdout.reconfigure(encoding="utf-8")
+
 
 # Проверка начальной матрицы на корректность и вызов вычисляющей функции
 def get_tridiagonal_determinant(matrix: list[list[int]]) -> int:
@@ -12,16 +14,40 @@ def get_tridiagonal_determinant(matrix: list[list[int]]) -> int:
     :return: значение определителя
     """
 
-    if matrix is None or len(matrix) == 0:
+    if matrix is None or len(matrix) == 0: # Если матрица пустая или не существует
         raise Exception
 
     n = len(matrix)
-    if any(len(row) != n for row in matrix) or any(
-        matrix[i][j] != 0 for i in range(n) for j in range(n) if abs(i - j) > 1
+    if any(len(row) != n for row in matrix) or any( # Если матрица не квадратная или
+        matrix[i][j] != 0
+        for i in range(n)
+        for j in range(n)
+        if abs(i - j) > 1 # вне диагоналей есть ненулевой элемент
     ):
         raise Exception
 
+    if any(
+        type(x) is not int for row in matrix for x in row
+    ):  # Если матрица не целочисленная
+        raise Exception
+
+    if n > 1:  # Если в матрице невырожденне диагонали
+        mid = matrix[0][0]  # Главная диагональ
+        right = matrix[0][1]  # Верхняя диагональ
+        left = matrix[1][0]  # Нижняя диагональ
+
+        for i in range(n):  # По всей матрице
+            if matrix[i][i] != mid:
+                raise Exception
+
+            if i < n - 1:
+                if matrix[i][i + 1] != right:
+                    raise Exception
+                if matrix[i + 1][i] != left:
+                    raise Exception
+
     return calculate_recursive(matrix)
+
 
 # Вычисление определителя для УЖЕ корректной матрицы
 def calculate_recursive(matrix: list[list[int]]) -> int:
