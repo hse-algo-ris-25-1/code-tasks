@@ -1,0 +1,53 @@
+import random
+
+def matrix_gen(N,M):
+    mat = []
+    for k in range(0,M):
+        c = [random.randint(1, 100) for x in range(N)]
+        mat.append(c)
+    return mat    
+
+def calculate_determinant(mat):
+    if mat is None:
+        raise ValueError()
+    if len(mat) == 0:
+        raise ValueError()
+    if len(mat[0])==0:
+        raise ValueError()
+    for g in mat:
+        if len(g)!=len(mat):
+            raise ValueError()
+    if len(mat) == 1:
+        return mat[0][0]
+    if len(mat) == 2:
+        return mat[0][0]*mat[1][1] - mat[0][1]*mat[1][0]
+    return summ(mat, 0)
+
+def minor(mat, I, J):
+    return [[mat[r][c] for c in range(len(mat[r])) if c != J] for r in range(len(mat)) if r != I]
+
+def Aij(mat, row, col):
+    minor_det = calculate_determinant(minor(mat, row, col))
+    t = 0 
+    if (row+col)%2==0:
+        t = 1
+    else:   
+        t = -1
+    return t*minor_det
+
+def summ(mat, row):
+    s = 0
+    for col in range(len(mat)):
+        c_ij = mat[row][col]
+        A_ij = Aij(mat, row, col)
+        s += c_ij*A_ij
+    return s
+
+if __name__ == "__main__":
+    n = int(input())
+    m = int(input())
+    i = int(input())
+    matrix = matrix_gen(n, m)
+    for x in matrix:
+        print(x)
+    print(summ(matrix, i))
