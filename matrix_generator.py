@@ -14,7 +14,31 @@ def generate_matrix_and_det(order: int) -> Case:
     :raises Exception: если order не является таким числом
     :return: Case с полями matrix и det
     """
-    pass
+    if not isinstance(order, int) or isinstance(order, bool):
+        raise Exception("Порядок должен быть целым числом")
+    if order < 1:
+        raise Exception("Порядок должен быть не меньше 1")
+
+
+    matrix = []
+    det = 1
+    for i in range(order):
+        row = []
+        for j in range(order):
+            if i == j:
+                # берём числа не равные нулю чтобы det != 0
+                value = i + 1
+                det *= value
+            elif j > i:
+                # любые целые
+                value = i + j
+            else:
+                # нули
+                value = 0
+            row.append(value)
+        matrix.append(row)
+
+    return Case(matrix=matrix, det=det)
 
 
 def main():
