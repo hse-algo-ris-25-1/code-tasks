@@ -14,7 +14,10 @@ def get_tridiagonal_determinant(matrix: list[list[int]]) -> int:
     :return: значение определителя
     """
 
-    if matrix is None or len(matrix) == 0: # Если матрица пустая или не существует
+    if not isinstance(matrix, list) or len(matrix) == 0: # Если матрица не является списком или пустая
+        raise Exception
+    
+    if any(not isinstance(row, list) for row in matrix): # Если хотя бы одна строка матрицы не является списком
         raise Exception
 
     n = len(matrix)
