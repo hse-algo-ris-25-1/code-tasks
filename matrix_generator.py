@@ -3,8 +3,13 @@ from random import randint
 
 Case = namedtuple("Case", ["matrix", "det"])
 
+ONLY_3DIAG = True
+
 DETERMINANT = 5
 MAX_MULTIPLIER = 1
+
+MAX_VALUE = 5
+SQRT_DETERMINANT = 3
 
 def add_row(matrix: list[list[int]], origin: int, target: int, multiplier: int = 1) -> None:
     """
@@ -32,6 +37,49 @@ def add_column(matrix: list[list[int]], origin: int, target: int, multiplier: in
         return
     for i in range(n):
         matrix[i][target] += matrix[i][origin] * multiplier
+
+
+def mult_matrix(up: list[list[int]], down: list[list[int]]) -> list[list[int]]:
+    """
+    Умножает матрицы (без разницы какие) up @ down
+    :param up: Матрица с главной диагональю + над ней
+    :param down: Матрица с главной диагональю + под ней
+    """
+    n = len(up)
+    result = [[0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            s = 0
+            for p in range(n):
+                s += up[i][p] * down[p][j]
+            result[i][j] = s
+    return result
+
+
+def generator_3diag(n: int, sqrt_det: int) -> list[list[int]]:
+    """
+    Генерирует случайную трехдиагональную матрицу порядка n с заданным детерминантом
+    :param n: Порядок матрицы
+    :param sqrt_det: Корень целевого детерминанта
+    :return: matrix
+    """
+    up = []
+    for _ in range(n):
+        up.append([0] * n)
+    for i in range(n):
+        up[i][i] = 1
+    up[0][0] = sqrt_det
+    down = [row[:] for row in up]
+
+    for i in range(n-1):
+        value = randint(-1 * MAX_VALUE, MAX_VALUE) # рандомное значение
+        up[i][i+1] = value
+
+    for i in range(1, n):
+        value = randint(-1 * MAX_VALUE, MAX_VALUE) # рандомное значение
+        down[i][i-1] = value
+
+    return mult_matrix(up, down)
 
 def generator(n: int, det: int) -> list[list[int]]:
     """
@@ -61,6 +109,7 @@ def generator(n: int, det: int) -> list[list[int]]:
 
     return matrix
 
+
 def generate_matrix_and_det(order: int) -> Case:
     """Строит квадратную целочисленную матрицу заданного порядка
     с заранее известным определителем.
@@ -74,8 +123,12 @@ def generate_matrix_and_det(order: int) -> Case:
     """
     if order < 1:
         raise Exception
+    if ONLY_3DIAG:
+        matrix = generator_3diag(order, SQRT_DETERMINANT)
+        return Case(matrix=matrix, det=DETERMINANT**2)
     matrix = generator(order, DETERMINANT)
     return Case(matrix=matrix, det=DETERMINANT)
+
 
 def main():
     n = 10
