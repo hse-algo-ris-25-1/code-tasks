@@ -49,6 +49,43 @@ class TestTridiagonalDeterminant(unittest.TestCase):
         matrix = [[2, -3, 0, 0], [5, 2, -3, 0], [0, 5, 2, -3], [0, 0, 5, 2]]
         self.assertEqual(get_tridiagonal_determinant(matrix), 421)
 
+    def test_not_triag_bad_diag_matrix(self):
+        """Проверяет, что функция выбрасывает исключение при передаче в
+        параметр матрицы, в которой одна из диагоналей содержит неверный элемент"""
+        self.assertRaises(
+            Exception,
+            get_tridiagonal_determinant,
+            [[2, -3, 0, 0], [5, 2, -3, 0], [0, 5, 2, -3], [0, 0, 5, 1]],
+        )
+
+    def test_double_elem_matrix(self):
+        """Проверяет, что функция выбрасывает исключение при передаче в
+        параметр матрицы, в которой есть не целое число"""
+        self.assertRaises(
+            Exception,
+            get_tridiagonal_determinant,
+            [[2.8, -3, 0, 0], [5, 2, -3, 0], [0, 5, 2, -3], [0, 0, 5, 1]],
+        )
+
+    def test_different_main_diagonal(self):
+        """Проверяет разные ли элементы на главной диагонали"""
+        matrix = [[2, 3, 0], [5, 1, 3],[0, 5, 2]]
+        self.assertRaises(Exception, get_tridiagonal_determinant, matrix)
+
+    def test_different_upper_diagonal(self):
+        """Проверяет разные ли элементы на верхней диагонали"""
+        matrix = [[2, 3, 0], [5, 2, 4], [0, 5, 2]]
+        self.assertRaises(Exception, get_tridiagonal_determinant, matrix)
+
+    def test_different_lower_diagonal(self):
+        """Проверяет разные ли элементы на нижней диагонали"""
+        matrix = [[2, 3, 0], [5, 2, 3], [0, 6, 2]]
+        self.assertRaises(Exception, get_tridiagonal_determinant, matrix)
+
+    def test_zero_matrix(self):
+        """Проверяет нулевая ли матрица"""
+        matrix = [[0, 0], [0, 0],]
+        self.assertEqual(get_tridiagonal_determinant(matrix), 0,)
 
 if __name__ == "__main__":
     unittest.main()
