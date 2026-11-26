@@ -1,4 +1,4 @@
-from list_node import ListNode
+from list_node import ListNode as ln
 
 
 class LinkedList:
@@ -31,7 +31,17 @@ class LinkedList:
         Аргументы:
             value: значение нового элемента.
         """
-        pass
+        new = ln(value)
+        self.size += 1
+
+        if self.head is None:
+            self.head = new
+            return
+
+        current = self.head
+        while current.next is not None:
+            current = current.next
+        current.next = new
 
     def insert(self, index, value):
         """
@@ -44,7 +54,24 @@ class LinkedList:
         Исключения:
             IndexError — если индекс вне диапазона.
         """
-        pass
+        if not (0 <= index <= self.size):
+            raise IndexError
+
+        new_node = ln(value)
+
+        if index == 0:
+            new_node.next = self.head
+            self.head = new_node
+            self.size += 1
+            return
+
+        prev = self.head
+        for _ in range(index - 1):
+            prev = prev.next
+
+        new_node.next = prev.next
+        prev.next = new_node
+        self.size += 1
 
     def remove(self, value):
         """
@@ -56,7 +83,21 @@ class LinkedList:
         Исключения:
             ValueError — если элемента с таким значением нет.
         """
-        pass
+        current = self.head
+        prev = None
+
+        while current is not None:
+            if current.value == value:
+                if prev is None:
+                    self.head = current.next
+                else:
+                    prev.next = current.next
+                self.size -= 1
+                return
+            prev = current
+            current = current.next
+
+        raise ValueError
 
     def index(self, value):
         """
@@ -69,7 +110,13 @@ class LinkedList:
             int: индекс элемента, если найден.
             None: если элемент отсутствует.
         """
-        pass
+        ind = 0
+        current = self.head
+        while current is not None:
+            if current.value == value:
+                return ind
+            current = current.next
+            ind += 1
 
     def __len__(self):
         """Возвращает количество элементов в списке."""
@@ -83,7 +130,10 @@ class LinkedList:
             for x in my_list:
                 ...
         """
-        pass
+        current = self.head
+        while current is not None:
+            yield current.value
+            current = current.next
 
     def __str__(self):
         """
