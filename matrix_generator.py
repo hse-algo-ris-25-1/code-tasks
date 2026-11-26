@@ -125,7 +125,7 @@ def generate_matrix_and_det(order: int) -> Case:
         raise Exception
     if ONLY_3DIAG:
         matrix = generator_3diag(order, SQRT_DETERMINANT)
-        return Case(matrix=matrix, det=DETERMINANT**2)
+        return Case(matrix=matrix, det=SQRT_DETERMINANT**2)
     matrix = generator(order, DETERMINANT)
     return Case(matrix=matrix, det=DETERMINANT)
 
