@@ -1,12 +1,18 @@
 def calculate_determinant(matrix: list[list[int]]) -> int:
-    """Вычисляет определитель разложением по строке.
+    if len(matrix) != len(matrix[0]): raise Exception('Не квадратная матрица')
+    if len(matrix) == 1: return matrix[0][0]
+    result = 0
+    sign = 1
+    for i in range(len(matrix[0])):
+        result += sign * matrix[0][i] * calculate_determinant(cut_matrix(matrix, i))
+        sign *= -1
+    return result
 
-    :param matrix: квадратная целочисленная матрица порядка не меньше 1
-    :raises Exception: если matrix не является такой матрицей
-    :return: значение определителя
-    """
-    pass
-
+def cut_matrix(matrix, column):
+    new_matrix = []
+    for i in range(1, len(matrix)):
+        new_matrix.append([matrix[i][j] for j in range(len(matrix[0])) if j != column])
+    return new_matrix
 
 def main():
     matrix = [[1, 2], [3, 4]]
